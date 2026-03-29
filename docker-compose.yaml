@@ -68,6 +68,7 @@ services:
     cpus: "4"
     ports:
       - "${HOST_PORT:-10087}:8080"
+      - "${CDP_PORT:-9222}:9222"
     environment:
       PROXY_SERVER: ${PROXY_SERVER:-}
       JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY:-}

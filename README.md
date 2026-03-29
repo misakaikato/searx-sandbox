@@ -15,7 +15,37 @@ Docker Compose deployment for **SearXNG** (privacy-first search engine) + **AIO 
 | searxng-caddy | 80/443 (host) | Reverse proxy |
 | searxng-main | 10086 | SearXNG search engine |
 | searxng-redis | 6379 (internal) | Cache |
-| sandbox | 10087 | AI workstation |
+| sandbox | 10087, 9222 | AI workstation + CDP browser |
+
+### OpenCLI Integration
+
+**opencli** can control the sandbox's browser via Chrome DevTools Protocol (CDP).
+
+**Prerequisites:**
+```bash
+# Install opencli
+npm install -g @jackwener/opencli
+
+# Or use bun
+bun install -g @jackwener/opencli
+```
+
+**Usage:**
+```bash
+# Option 1: Using the helper script
+cd searx-sandbox
+source .env  # Load CDP_PORT
+./opencli-cdp.sh antigravity status
+
+# Option 2: Manual
+export OPENCLI_CDP_ENDPOINT="ws://localhost:9222"
+opencli antigravity status
+opencli antigravity send "Take a screenshot"
+```
+
+**Available Sites:** opencli supports 50+ sites including Bilibili, Zhihu, Xiaohongshu, Reddit, HackerNews, GitHub, and more via site-specific commands.
+
+See [opencli documentation](https://github.com/jackwener/opencli) for full command reference.
 
 ### Why This Matters for AI Agents
 
@@ -61,6 +91,7 @@ Edit `.env` file:
 |----------|---------|-------------|
 | `SEARXNG_HOSTNAME` | http://localhost | SearXNG access URL |
 | `HOST_PORT` | 10087 | Sandbox port |
+| `CDP_PORT` | 9222 | Browser CDP debugging port |
 | `TZ` | Asia/Singapore | Timezone |
 | `WORKSPACE` | /home/gem | Working directory |
 | `PROXY_SERVER` | - | Proxy server |
@@ -70,6 +101,7 @@ Edit `.env` file:
 
 - **Sandbox**: http://localhost:10087
 - **SearXNG**: http://localhost:10086
+- **Browser CDP**: ws://localhost:9222
 
 ### Stop
 
@@ -96,7 +128,37 @@ docker compose down -v
 | searxng-caddy | 80/443 (host) | 反向代理 |
 | searxng-main | 10086 | SearXNG 搜索引擎 |
 | searxng-redis | 6379 (内部) | 缓存 |
-| sandbox | 10087 | AI 工作站 |
+| sandbox | 10087, 9222 | AI 工作站 + CDP 浏览器 |
+
+### OpenCLI 集成
+
+**opencli** 可以通过 Chrome DevTools Protocol (CDP) 控制 sandbox 的浏览器。
+
+**前置条件：**
+```bash
+# 安装 opencli
+npm install -g @jackwener/opencli
+
+# 或使用 bun
+bun install -g @jackwener/opencli
+```
+
+**使用方法：**
+```bash
+# 方式一：使用辅助脚本
+cd searx-sandbox
+source .env  # 加载 CDP_PORT
+./opencli-cdp.sh antigravity status
+
+# 方式二：手动设置
+export OPENCLI_CDP_ENDPOINT="ws://localhost:9222"
+opencli antigravity status
+opencli antigravity send "截图"
+```
+
+**支持的站点：** opencli 支持 50+ 网站，包括 B站、知乎、小红书、Reddit、HackerNews、GitHub 等。
+
+详细命令参考 [opencli 文档](https://github.com/jackwener/opencli)。
 
 ### 为什么这对 AI Agent 很重要
 
@@ -142,6 +204,7 @@ docker compose logs -f
 |------|--------|------|
 | `SEARXNG_HOSTNAME` | http://localhost | SearXNG 访问地址 |
 | `HOST_PORT` | 10087 | Sandbox 端口 |
+| `CDP_PORT` | 9222 | 浏览器 CDP 调试端口 |
 | `TZ` | Asia/Singapore | 时区 |
 | `WORKSPACE` | /home/gem | 工作目录 |
 | `PROXY_SERVER` | - | 代理服务器 |
@@ -151,6 +214,7 @@ docker compose logs -f
 
 - **Sandbox**: http://localhost:10087
 - **SearXNG**: http://localhost:10086
+- **浏览器 CDP**: ws://localhost:9222
 
 ### 停止
 
